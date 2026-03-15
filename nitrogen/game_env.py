@@ -350,14 +350,23 @@ class PyautoguiScreenshotBackend:
 
 
 class DxcamScreenshotBackend:
-    def __init__(self, bbox, fps):
+    def __init__(self, bbox, fps, game_window=None):
         import dxcam
         self.camera = dxcam.create()
         self.bbox = bbox
         self.last_screenshot = None
+        self.game_window = game_window
         self.camera.start(region=self.bbox, target_fps=fps, video_mode=True)
 
     def screenshot(self):
+        # Ensure game window is in foreground for correct capture
+        if self.game_window is not None:
+            try:
+                if not self.game_window.isActive:
+                    self.game_window.activate()
+            except:
+                pass  # Window might be minimized or unavailable
+
         screenshot = self.camera.get_latest_frame()
         if screenshot is None:
             print("DXCAM failed to capture frame, trying to use the latest screenshot")
@@ -475,7 +484,7 @@ class GamepadEnv(Env):
 
         # Get the screenshot backend
         if screenshot_backend == "dxcam":
-            self.screenshot_backend = DxcamScreenshotBackend(self.bbox, self.env_fps)
+            self.screenshot_backend = DxcamScreenshotBackend(self.bbox, self.env_fps, game_window=self.game_window)
         elif screenshot_backend == "pyautogui":
             self.screenshot_backend = PyautoguiScreenshotBackend(self.bbox)
         else:

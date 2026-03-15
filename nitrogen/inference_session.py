@@ -120,9 +120,14 @@ class InferenceSession:
         self.action_buffer = deque(maxlen=self.max_buffer_size)
 
     @classmethod
-    def from_ckpt(cls, checkpoint_path: str, old_layout=False, cfg_scale=1.0, context_length=None):
+    def from_ckpt(cls, checkpoint_path: str, old_layout=False, cfg_scale=1.0, context_length=None, num_inference_timesteps=None):
         """Create an InferenceSession from a checkpoint."""
         model, tokenizer, img_proc, ckpt_config, game_mapping, action_downsample_ratio = load_model(checkpoint_path)
+
+        # Override inference timesteps if specified (reduces from default 16 for faster inference)
+        if num_inference_timesteps is not None:
+            print(f"Overriding num_inference_timesteps: {model.num_inference_timesteps} -> {num_inference_timesteps}")
+            model.num_inference_timesteps = num_inference_timesteps
 
         if game_mapping is not None:
             # Ask user to pick a game from the list

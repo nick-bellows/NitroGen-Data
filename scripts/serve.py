@@ -11,9 +11,10 @@ if __name__ == "__main__":
     parser.add_argument("--old-layout", action="store_true", help="Use old layout")
     parser.add_argument("--cfg", type=float, default=1.0, help="CFG scale")
     parser.add_argument("--ctx", type=int, default=1, help="Context length")
+    parser.add_argument("--timesteps", type=int, default=None, help="Override inference timesteps (default 16, try 4-8 for speed)")
     args = parser.parse_args()
 
-    session = InferenceSession.from_ckpt(args.ckpt, old_layout=args.old_layout, cfg_scale=args.cfg, context_length=args.ctx)
+    session = InferenceSession.from_ckpt(args.ckpt, old_layout=args.old_layout, cfg_scale=args.cfg, context_length=args.ctx, num_inference_timesteps=args.timesteps)
 
     # Setup ZeroMQ
     context = zmq.Context()

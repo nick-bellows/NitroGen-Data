@@ -1,0 +1,43 @@
+# Virtual environment
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Model checkpoints (too large for git)
+checkpoints/*.pt
+
+# Output files
+out/
+
+# Recordings and training data
+games/*/recordings/
+games/*/dagger_sessions/
+games/*/dagger_data/
+
+# NVIDIA dataset downloads and processed data
+nvidia_index/downloads/
+nvidia_index/metadata/
+nvidia_index/index/
+nvidia_index/logs/
+nvidia_data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Claude Code
+.claude/
